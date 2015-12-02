@@ -59,10 +59,10 @@ function checkField(obj){
 			enableButton(false);
 			return;
 		}
-		if($(obj).attr('id') === "p1" && value > 60){
+		/* if($(obj).attr('id') === "p1" && value > 60){
 			$(obj).next().html('Số tín chỉ của bạn vượt quá mức bình thường(60 tín chỉ)').css('display', 'inline');
 			return;
-		}
+		} */
 		$(obj).next().html('').css('display', 'none');
 	}catch(e){
 		console.log(e);
@@ -111,7 +111,7 @@ function cal(parts, kl){
 		setDialogContent("Bạn chưa học gì cả!<br />Chắc bạn đùa.");
 		return;
 	}
-	var msg=[], part25=parts[1]+parts[4];
+	var msg=[], part25=parts[1]+parts[4], part125 = parts[0]+parts[1]+parts[4];
 	if(parts[0] < 60){
 		msg.push("<p> <b>Khối Giáo dục chuyên nghiệp phần bắt buộc</b> yêu cầu tối thiểu 60 tín chỉ. Còn thiếu "+(60-parts[0])+" tín chỉ</p>");
 	}
@@ -124,8 +124,14 @@ function cal(parts, kl){
 	if(kl && part25 < 25){
 		msg.push("<p> <b>Khối Giáo dục chuyên nghiệp phần tự chọn</b> yêu cầu tối thiểu 25 tín chỉ. Còn thiếu "+(25-part25)+" tín chỉ</p>");
 	}
-	if(!kl && part25 < 35){
-		msg.push("<p> <b>Khối Giáo dục chuyên nghiệp phần tự chọn</b> yêu cầu tối thiểu 35 tín chỉ. Còn thiếu "+(35-part25)+" tín chỉ</p>");
+	
+	if(!kl){
+		if(part25 < 25){
+			msg.push("<p> <b>Khối Giáo dục chuyên nghiệp phần tự chọn</b> yêu cầu tối thiểu 25 tín chỉ. Còn thiếu "+(25-part25)+" tín chỉ</p>");	
+		}else if(parts[0] >= 60 && part125 < 95){
+			msg.push("<p> Nếu bạn không viết khoá luận, <b>Khối Giáo dục chuyên nghiệp </b> yêu cầu tối thiểu 95 tín chỉ. Còn thiếu "+(95-part125)+" tín chỉ. Bạn cần đăng ký thêm Giáo dục chuyên nghiệp phần tự chọn.</p>");
+		}
+		
 	}
 	if(msg.length === 0){
 		if((kl && partSum < 110) || !kl && partSum < 120){
