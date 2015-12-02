@@ -27,7 +27,7 @@
             <li><a href="/test?t=m">Tính điểm trung bình</a></li>
             <li><a href="/test?t=c">Kiểm tra tình trạng học</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>/.nav-collapse
       </div>
     </nav>
 	
@@ -37,6 +37,20 @@
 	<script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
 	<script src="/css/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/js/main.js"></script>
+	<script>
+	$(document).ready(function() {
+	    $('a[href="#navbar-more-show"], .navbar-more-overlay').on('click', function(event) {
+			event.preventDefault();
+			$('body').toggleClass('navbar-more-show');
+			if ($('body').hasClass('navbar-more-show'))	{
+				$('a[href="#navbar-more-show"]').closest('li').addClass('active');
+			}else{
+				$('a[href="#navbar-more-show"]').closest('li').removeClass('active');
+			}
+			return false;
+		});
+	});
+	</script>
 	{% block script-more %} {% endblock %}
 </body>
 </html>
