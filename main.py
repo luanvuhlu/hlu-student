@@ -3,12 +3,24 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 import os
 from google.appengine.ext.webapp import template
-
+from model import ViewCounter
 
 BASE_PATH = os.path.dirname(__file__)
+
+def increment_count():
+    for counter in ViewCounter.query():
+        counter.count = counter.count+1
+        counter.put()
+        return
+    counter = ViewCounter(count = 1)
+    counter.put()
+    return
+
 class About(webapp.RequestHandler):
     def get(self, *args):
+        increment_count()
         path = os.path.join(BASE_PATH, 'templates/index.html')
+#         path = os.path.join(BASE_PATH, 'templates/chat.html')
         self.response.out.write(template.render(path, []))
 class ViewInfo(webapp.RequestHandler):
     def get(self):

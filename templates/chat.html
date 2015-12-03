@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Linh tinh{% endblock %}
+{% block static %}
+<style>
+.grid{
+    margin: 0px auto;
+}
+
+.grid-item {
+	
+	cursor: pointer;
+	position: relative;
+	float: left;
+	width: 250px;
+	min-height: 80px;
+	margin-bottom: 5px;
+	padding: 10px;
+	background: #9C27B0;
+	color: white;
+	font-size: 16px; 
+	-webkit-box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+	/* No select */
+	/* 
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    */
+}
+.grid-item.grid-hover{
+	-webkit-box-shadow: 0px 0px 20px 1px rgba(62,70,224,1);
+	-moz-box-shadow: 0px 0px 20px 1px rgba(62,70,224,1);
+	box-shadow: 0px 0px 20px 1px rgba(62,70,224,1);
+}
+
+/* add note */
+#addNote {
+	width: 100%;
+	background: #FFF;
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: 400;
+	color: #333;
+	height: 54px;
+	outline: none;
+	margin: 0;
+	padding-left: 10px;
+	padding-top: 10px;
+	border: 1px solid #E0E0E0;
+	-webkit-box-shadow: 4px 4px 19px -3px rgba(0, 0, 0, 0.81);
+	-moz-box-shadow: 4px 4px 19px -3px rgba(0, 0, 0, 0.81);
+	box-shadow: 4px 4px 19px -3px rgba(0, 0, 0, 0.81);
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="col-xs-10 col-xs-offset-1 col-md-6 col-md-offset-3">
+	<p class="spacer">
+		<span class="textarea">
+			<textarea id="addNote" spellcheck="false" placeholder="Viết gì đó"></textarea>
+</div>
+<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+	<div class="grid">
+	{% for item in messages %}
+	  <div class="grid-item">
+	  	{{ item.content }}
+	  </div>
+	 {% endfor %}
+	</div>
+</div>
+{% endblock %}
+{% block script-more %}
+<script src="/js/isotope.pkgd.js"></script>
+<script src="/js/jquery.flexibleArea.js"></script>
+<script>
+	var isNoteEditing = false;
+	var toggleHover = function(){
+		$(this).toggleClass('grid-hover');
+	}
+	function addItem($grid, $note){
+		var $items = $('<div class="grid-item">'+$note.val()+'</div>');
+		$items.hover(toggleHover);
+		$grid.prepend( $items ).isotope( 'prepended', $items );
+		$note.val('');
+	}
+	$(document).ready(function() {
+		// init Isotope
+		var $grid = $('.grid').isotope({
+			itemSelector : '.grid-item',
+			masonry : {
+				columnWidth : 10,
+				gutter: 5,
+				 isFitWidth: true
+			},
+		});
+		// Textarea
+		var $note=$("#addNote");
+		$note.flexible().focus(function(){
+			isNoteEditing = true;
+		}).click(function(event){
+		    event.stopPropagation();
+		}).keyup(function (event) {
+		    if (event.keyCode == 13) {
+		        if(event.shiftKey){
+		        	addItem($grid, $(this));
+		        	isNoteEditing = false;
+		        }
+		    }
+		});
+		$('html').click(function() {
+			if(isNoteEditing && $note.val().trim().length > 0){
+				addItem($grid, $note);
+			}
+			isNoteEditing = false;
+		});
+		
+		$('.grid-item').hover(toggleHover);
+	});
+</script>
+{% endblock %}
+
