@@ -20,3 +20,43 @@
     -ms-user-select: none;
     user-select: none;
 }
+.red-color{
+	background-color:#F44336 !important;
+}
+.pink-color{
+	background-color:#E91E63 !important;
+}
+.purple-color{
+	background-color:#9C27B0 !important;
+}
+.deep-purple-color{
+	background-color:#673AB7 !important;
+}
+.indigo-color{
+	background-color:#3F51B5 !important;
+}
+.red-color{
+	background-color:#F44336 !important;
+}
+.blue-color{
+	background-color:#2196F3 !important;
+}
+.light-blue-color{
+	background-color:#03A9F4 !important;
+}
+.cyan-color{
+	background-color: #00BCD4 !important;
+}
+.teal-color{
+	background-color: #009688 !important;
+}
+.green-color{
+	background-color: #00BCD4 !important;
+}
+.light-green-color{
+	background-color: #8BC34A !important;
+}
+.lime-color{
+	background-color: #CDDC39 !important;
+}
+

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*- 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-import os
+import os, cgi, HTMLParser
 from google.appengine.ext.webapp import template
-from model import ViewCounter
+from model import ViewCounter, Message
 
 BASE_PATH = os.path.dirname(__file__)
 
@@ -19,9 +19,23 @@ def increment_count():
 class About(webapp.RequestHandler):
     def get(self, *args):
         increment_count()
-        path = os.path.join(BASE_PATH, 'templates/index.html')
-#         path = os.path.join(BASE_PATH, 'templates/chat.html')
-        self.response.out.write(template.render(path, []))
+#         path = os.path.join(BASE_PATH, 'templates/index.html')
+        path = os.path.join(BASE_PATH, 'templates/chat.html')
+        template_values = {
+                           'messages':  Message.query().order(-Message.date)
+                           }
+        self.response.out.write(template.render(path, template_values ))
+class UpdateMessage(webapp.RequestHandler):
+    def get(self, *args):
+        content = self.request.get("content")
+        content = cgi.escape(content);
+        len_after_encode = len(content.encode('utf-8'))
+        if len_after_encode == 0 or len_after_encode > 1400:
+            self.response.out.write('')
+            return
+        message = Message(content = content)
+        message.put()
+        self.response.out.write(message.color)
 class ViewInfo(webapp.RequestHandler):
     def get(self):
         path =  os.path.join(BASE_PATH, 'templates/view_info.html')
@@ -43,6 +57,7 @@ application = webapp.WSGIApplication([
                                       ('/ViewInfo', ViewInfo),
                                       ('/structure', Structure),
                                       ('/test', MarkTest),
+                                      ('/add-message', UpdateMessage),
                                     ], debug=True)
 def main():
     run_wsgi_app(application)

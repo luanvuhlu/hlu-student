@@ -7,7 +7,6 @@
 }
 
 .grid-item {
-	
 	cursor: pointer;
 	position: relative;
 	float: left;
@@ -30,6 +29,13 @@
     -ms-user-select: none;
     user-select: none;
     */
+}
+.grid-item pre{
+	border: none;
+	color: white;
+	padding: 0px;
+	font-size: 16px; 
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .grid-item.grid-hover{
 	-webkit-box-shadow: 0px 0px 20px 1px rgba(62,70,224,1);
@@ -66,8 +72,8 @@
 <div class="col-xs-12 col-sm-10 col-sm-offset-1">
 	<div class="grid">
 	{% for item in messages %}
-	  <div class="grid-item">
-	  	{{ item.content }}
+	  <div class="grid-item {{item.color}}">
+	  	<pre class="{{item.color}}">{{ item.content }}</pre>
 	  </div>
 	 {% endfor %}
 	</div>
@@ -81,11 +87,34 @@
 	var toggleHover = function(){
 		$(this).toggleClass('grid-hover');
 	}
+	function addMessageToPage($grid, $note, cssClass){
+		try{
+			var $items = $('<div class="grid-item '+cssClass+'">'+nl2br($note.val())+'</div>');
+			$items.hover(toggleHover);
+			$grid.prepend( $items ).isotope( 'prepended', $items );
+			$note.val('');
+		}catch(e){
+			alert('Đã có lỗi xảy ra. Vui lòng thử lại');
+		}
+	}
 	function addItem($grid, $note){
-		var $items = $('<div class="grid-item">'+$note.val()+'</div>');
-		$items.hover(toggleHover);
-		$grid.prepend( $items ).isotope( 'prepended', $items );
-		$note.val('');
+		if($note.val().trim().length === 0){
+			return;
+		}
+		isNoteEditing = false;
+		$.get('/add-message', {content: $note.val()})
+		.done(function(data){
+			if(data.length > 0){
+				addMessageToPage($grid, $note, data);
+			}else{
+				alert('Đã có lỗi xảy ra. Vui lòng thử lại');
+			}
+			
+		})
+		.fail(function(){
+			alert('Đã có lỗi xảy ra. Vui lòng thử lại');
+		});
+		
 	}
 	$(document).ready(function() {
 		// init Isotope
@@ -107,7 +136,6 @@
 		    if (event.keyCode == 13) {
 		        if(event.shiftKey){
 		        	addItem($grid, $(this));
-		        	isNoteEditing = false;
 		        }
 		    }
 		});

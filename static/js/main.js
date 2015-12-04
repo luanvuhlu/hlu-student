@@ -17,3 +17,7 @@ function drawQr(str){
 	matrix.draw(canvas, 0, 0);
 	$('#qrcode').html(canvas);
 }
+function nl2br(str){
+	  return (str + '')
+	    .replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1 <br \/> $2');
+}
