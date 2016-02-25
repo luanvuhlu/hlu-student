@@ -153,7 +153,7 @@ function cal(parts, kl){
 		return;
 	}
 	var sum = parts[1]*10+parts[2]*15+parts[3]*20+parts[4]*25+parts[5]*30+parts[6]*35+parts[7]*37+parts[8]*40,
-		sumTc = parts[0]+parts[1]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5]+parts[6]+parts[7]+parts[8], average=0.0;
+		sumTc = parts[0]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5]+parts[6]+parts[7]+parts[8], average=0.0;
 	average = sum/10/sumTc;
 	setDialogContent("Điểm trung bình của bạn là: <b>"+average.toFixed(1)+"</b> trên tổng số "+sumTc+" tín chỉ.");
 }
